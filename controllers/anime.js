@@ -13,7 +13,9 @@ const createAnime = async (req, res, next) => {
     const anime = await Anime.create(req.body);
     const user = await User.findById(id);
     user.animes.push(anime);
+    anime.user = user;
     user.save();
+    anime.save();
     res.send("anime created");
   } catch (err) {
     next(new AnimeError(err.message, err.status));
