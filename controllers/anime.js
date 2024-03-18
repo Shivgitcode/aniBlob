@@ -44,11 +44,15 @@ const showAnime = async (req, res) => {
 };
 
 const updateAnime = async (req, res) => {
-  const { id } = req.params;
-  const updatedAnime = await Anime.findByIdAndUpdate(id, req.body, {
-    new: true,
-  });
-  res.send(updatedAnime);
+  try {
+    const { id } = req.params;
+    const updatedAnime = await Anime.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.send(updatedAnime);
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
