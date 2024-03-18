@@ -28,20 +28,33 @@ const showAnimes = async (req, res) => {
   res.send(animes);
 };
 
-const deleteAnime=async(req,res)=>{
-  const {id}=req.params
-  await Anime.findByIdAndDelete(id)
-  res.send("Anime deleted successfully")
-}
+const deleteAnime = async (req, res) => {
+  const { id } = req.params;
+  await Anime.findByIdAndDelete(id);
+  res.send("Anime deleted successfully");
+};
 
-const showAnime=async(req,res)=>{
-  const token=req.cookies.jwt;
-  const id=jwt.verify(token,process.env.JWT_SECRET).id;
-  const user=await User.findById(id).populate("animes")
-  const foundAnime=
-}
+const showAnime = async (req, res) => {
+  const token = req.cookies.jwt;
+  const { id } = req.params;
+  const userid = jwt.verify(token, process.env.JWT_SECRET).id;
+  const user = await User.findById(userid).populate("animes");
+  const foundAnime = user.animes.find((el) => el._id.toString() === id);
+  res.send(foundAnime);
+};
+
+const updateAnime = async (req, res) => {
+  const { id } = req.params;
+  const updatedAnime = await Anime.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+  res.send(updatedAnime);
+};
 
 module.exports = {
   createAnime,
   showAnimes,
+  deleteAnime,
+  showAnime,
+  updateAnime,
 };
